@@ -3,6 +3,7 @@ import java.util.Scanner;
 
 public class pacman{
 
+    private static int puntos = 0, poder = 10;
     public static void main(String[] args){
         int[][] pacmanMapa ={
             {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},				
@@ -117,6 +118,13 @@ public class pacman{
         //poder(unPersonaje, unMapa);
 	}
 
+    private static void registraPuntos(int[] pacman, int[][] pacmanMapa){
+        if(pacmanMapa[pacman[1]][pacman[0]] == 0){
+            pacmanMapa[pacman[1]][pacman[0]] = 2;
+            puntos++;
+        }
+    }
+
     private static void dibujaMundo(int[][] pacmanMapa, int[] pacman) {
 
 		limpiaPantalla();
@@ -128,14 +136,35 @@ public class pacman{
                 if (x == pacman[0] && y == pacman[1]) {
                     dibujaPersonaje();
                 } else {
-                        imprimeElemento(pacmanMapa[y][x]);
+                        dibujaElemento(pacmanMapa[y][x]);
                 }
 			}
 			dibujaBordeV(true);
 		}
 		dibujaBordeH(pacmanMapa[0].length);
-		imprimeStatus(pacman);
+		dibujaPuntos(pacman);
 	}
+
+    private static void dibujaElemento(int elementoDelMapa) {
+
+		String[] matrizDeElementos = {
+				INICIO + YELLOW_BOLD + BLACK_BACKGROUND + " 0 " + RESET,
+				INICIO + WHITE + WHITE_BACKGROUND + "[#]" + RESET,
+                INICIO + BLACK + BLACK_BACKGROUND + "   " + RESET,
+				INICIO + BLUE_BOLD + BLUE_BACKGROUND + "~ ~" + RESET,
+                INICIO + PURPLE + PURPLE_BACKGROUND + "!T!" + RESET,
+                INICIO + PURPLE + PURPLE_BACKGROUND + "  " + RESET,
+                INICIO + YELLOW_BOLD + BLACK_BACKGROUND + " @ " + RESET
+		};
+		System.out.print(matrizDeElementos[elementoDelMapa]);
+	}
+
+    private static void dibujaPuntos(int[] pacman) {
+
+		System.out.println("El personaje está en X:[" + pacman[0] + "] Y:[" + pacman[1] + "]");
+		System.out.println("Tienes [ "+ puntos +" ] puntos");
+
+    }
 
     private static String INICIO = "\033[";
 	private static String RESET = "\033[0m";
