@@ -48,10 +48,11 @@ class elPacman{
 		};
 		int[] puntosObtenidos = {0};
         int[] contadorInvincibilidad = {0};
+		int[] tiempoDeFruta = {0};
 
 		//if (puntosObtenidos[0] < 244){
 			do {
-				pasoDelTiempo(contadorTurnos, contadorInvincibilidad, matrizDelMapa);
+				pasoDelTiempo(contadorTurnos, contadorInvincibilidad, matrizDelMapa, tiempoDeFruta);
 				imprimirElMundo(matrizDelMapa, pacmanPosicion, losFantasmas, puntosObtenidos, contadorInvincibilidad, contadorTurnos);
 			} while ((procesaMovimiento(matrizDelMapa, pacmanPosicion, losFantasmas)));
 		//} else {
@@ -60,18 +61,30 @@ class elPacman{
 		//}
     }
 
-	private static void pasoDelTiempo(int[] contadorTurnos, int[] contadorInvincibilidad, int[][] matrizDelMapa) {
+	private static void pasoDelTiempo(int[] contadorTurnos, int[] contadorInvincibilidad, int[][] matrizDelMapa, int[] tiempoDeFruta) {
 		contadorTurnos[0] = contadorTurnos[0] + 1;
 
 		if (contadorInvincibilidad[0] > 0){
 			contadorInvincibilidad[0] = contadorInvincibilidad[0] - 1;
 		}
 		if (contadorTurnos[0] % 80 == 0){
+			tiempoDeFruta[0] = 15;
 			double espacioParaFruta = Math.random();
 			if (espacioParaFruta > 0.5){
 				matrizDelMapa[15][13] = 6;
 			} else {
 				matrizDelMapa[15][14] = 6;
+			}
+		}
+		if (tiempoDeFruta[0] > 0){
+			tiempoDeFruta[0] = tiempoDeFruta[0] - 1;
+		}
+		if (tiempoDeFruta[0] == 0){
+			if (matrizDelMapa[15][13] == 6){
+				matrizDelMapa[15][13] = 0;
+			}
+			if (matrizDelMapa[15][14] == 6){
+				matrizDelMapa[15][13] = 0;
 			}
 		}
 	}
