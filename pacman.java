@@ -59,7 +59,6 @@ class pacman {
         for (int tiempoFruta = 0; tiempoFruta > contarMovimientos[0]; tiempoFruta++) {
             if (tiempoFruta > 80) {
                 unMapa[elPersonajeY][elPersonajeX] = 0;
-                puntos[0] = puntos[0] + 10;
             } else {
                 unMapa[elPersonajeY][elPersonajeX] = 6;
             }
