@@ -1,4 +1,3 @@
-
 import java.util.Scanner;
 import java.util.Random;
 
@@ -39,10 +38,10 @@ class pacman {
 
         int[][] elPersonaje = { { 13, 21 } };
         int[][] NPCs = {
-                { 11, 13 },
-                { 12, 13 },
-                { 14, 13 },
-                { 16, 13 }
+                { 13, 12 },
+                { 13, 12 },
+                { 13, 12 },
+                { 13, 12 }
         };
         int[] contarMovimientos = { 0 };
         int[] puntos = { 0 };
@@ -51,6 +50,10 @@ class pacman {
             imprimeMundo(elMapa, elPersonaje, NPCs, contarMovimientos, puntos);
         } while (procesaMovimiento(elMapa, elPersonaje, NPCs, puntos));
     };
+
+    private static void pastillaFuerza(int[] contarMovimientos) {
+
+    }
 
     private static void pasaElTiempo(int[] contarMovimientos) {
         contarMovimientos[0]++;
@@ -117,6 +120,10 @@ class pacman {
             unMapa[elPersonajeY][elPersonajeX] = 0;
             puntos[0]++;
         }
+        if (unMapa[elPersonajeY][elPersonajeX] == 4 && isNPC == false) {
+            unMapa[elPersonajeY][elPersonajeX] = 0;
+            puntos[0] = puntos[0] + 5;
+        }
 
         unPersonaje[0] = elPersonajeX;
         unPersonaje[1] = elPersonajeY;
@@ -134,11 +141,17 @@ class pacman {
         }
     }
 
-    private static boolean hayNPC(int[][] losNPCs, int i, int j) {
-
+    private static boolean hayNPC(int[][] losNPCs, int i, int j, int[] puntos, int[] elPersonaje, int[][] elMapa) {
+        int elPersonajeX, elPersonajeY;
+        elPersonajeX = elPersonaje[0];
+        elPersonajeY = elPersonaje[1];
         for (int unNPC = 0; unNPC < losNPCs.length; unNPC++) {
             if (losNPCs[unNPC][0] == j && losNPCs[unNPC][1] == i) {
                 return true;
+            } else if (losNPCs[unNPC][0] == elMapa[elPersonajeY][elPersonajeX]) {
+                losNPCs[unNPC][0] = 14;
+                losNPCs[unNPC][1] = 13;
+                puntos[0] = puntos[0] + 10;
             }
         }
         return false;
@@ -152,7 +165,7 @@ class pacman {
                 if (i == elPersonaje[0][1] && j == elPersonaje[0][0]) {
                     imprimePersonaje();
                 } else {
-                    if (hayNPC(losNPCs, i, j)) {
+                    if (hayNPC(losNPCs, i, j, puntos, elPersonaje[0], elMapa)) {
                         imprimeNPC();
                     } else {
                         imprimeElemento(elMapa[i][j]);
