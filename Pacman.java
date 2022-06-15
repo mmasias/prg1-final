@@ -146,8 +146,8 @@ public class Pacman{
         if(direccion == 'O' && (elMapa[posicionY][posicionX+1]%2==0)){posicionX = posicionX + 1;}
 
 //--------------Teletrasporte--------------
-        if(elMapa[posicionY][posicionX]==8){posicionX=0;posicionY=17;}else
-        if(elMapa[posicionY][posicionX]==6){posicionX=18;posicionY=17;}
+        if(posicionX==27 && posicionY==13){posicionX=0;}else
+        if(posicionX==0 && posicionY==13){posicionX=27;}
 
 //--------------Bandas Transportadoras--------------
         if(elMapa[posicionY][posicionX]==10){posicionX=posicionX+1;}else
@@ -157,12 +157,15 @@ public class Pacman{
         
 //--------------Limpiar monedas--------------
         if(elMapa[posicionY][posicionX]==0){
+            puntos = puntos + 1;
             elMapa[posicionY][posicionX]=2;
         }
+        
 //--------------Turnos de pastilla-----------
         if(elMapa[posicionY][posicionX]==4){
-           turnosRestantes = 16;
-           elMapa[posicionY][posicionX]=2;
+            puntos = puntos + 4;
+            turnosRestantes = 21;
+            elMapa[posicionY][posicionX]=2;
         }
         turnos[0] = turnosRestantes;
         restarTurnos(turnos);
@@ -192,8 +195,8 @@ public class Pacman{
         int personajeY = elPersonaje[0][1];
 
         if((personajeY==elNPC[0][1] && personajeX==elNPC[0][0]) && estaVulnerable==true){
-            elNPC[0][1] = 17;
-            elNPC[0][0] = 9;
+            elNPC[0][1] = 13;
+            elNPC[0][0] = 13;
             return true;
         }
         else if(personajeY==elNPC[0][1] && personajeX==elNPC[0][0]){
@@ -202,8 +205,8 @@ public class Pacman{
         }
 
         if((personajeY==elNPC[1][1] && personajeX==elNPC[1][0]) && estaVulnerable==true){
-            elNPC[1][1] = 17;
-            elNPC[1][0] = 9;
+            elNPC[1][1] = 13;
+            elNPC[1][0] = 13;
             return true;
         }
         else if(personajeY==elNPC[1][1] && personajeX==elNPC[1][0]){
@@ -211,8 +214,8 @@ public class Pacman{
             return false;
         }
         if((personajeY==elNPC[2][1] && personajeX==elNPC[2][0]) && estaVulnerable==true){
-            elNPC[2][1] = 17;
-            elNPC[2][0] = 9;
+            elNPC[2][1] = 13;
+            elNPC[2][0] = 13;
             return true;
         }
         else if(personajeY==elNPC[2][1] && personajeX==elNPC[2][0]){
@@ -221,8 +224,8 @@ public class Pacman{
         }
 
         if((personajeY==elNPC[3][1] && personajeX==elNPC[3][0]) && estaVulnerable==true){
-            elNPC[3][1] = 17;
-            elNPC[3][0] = 9;
+            elNPC[3][1] = 13;
+            elNPC[3][0] = 13;
             return true;
         }
         else if(personajeY==elNPC[3][1] && personajeX==elNPC[3][0]){
@@ -239,12 +242,13 @@ public class Pacman{
         for(int i=0;i<elMapa.length;i++){
             for(int j=0;j<elMapa[i].length;j++){
                 if(elMapa[i][j]==0 || elMapa[i][j]==4){
-                    monedasRestantes = monedasRestantes + 1;     
+                    monedasRestantes = monedasRestantes + 1;   
                 }
             }
         }
 
         System.out.println("Monedas restantes: " + "[" + monedasRestantes + "]");
+        System.out.println("Puntos: " + puntos);
         if(monedasRestantes==0){
             System.out.println("Felicidades, has completado el juego!!");
             hayMonedas=false;
@@ -366,6 +370,7 @@ public class Pacman{
     static int rangoAntorcha = 4;
     static boolean estaVulnerable=false;
     static boolean hayMonedas=true;
+    static int puntos=0;
 
     private static String INICIO = "\033[";
 	private static String RESET = "\033[0m";
