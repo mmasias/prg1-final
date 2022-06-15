@@ -1,5 +1,6 @@
 package sergio_mayen;
 import java.util.Scanner;
+import java.util.Random;
 
 public class pacman{
 
@@ -36,8 +37,15 @@ public class pacman{
         };
 
         int[] pacMan = {13,22};
+        int[][] fantasma = {
+            { 12, 13 },
+            { 12, 14 },
+            { 12, 14 },
+            { 12, 15 }
+        };
         do {
 			dibujaMundo(pacmanMapa, pacMan);
+            
 		} while (movimientoPacman(pacmanMapa, pacMan));
     }
 
@@ -112,7 +120,7 @@ public class pacman{
 		pacman[1] = elPacmanY;
         
         registraPuntos(pacman, pacmanMapa);
-        //poder(unPersonaje, unMapa);
+        pacmanPoder(pacman, pacmanMapa);
 	}
 
     private static void registraPuntos(int[] pacman, int[][] pacmanMapa){
@@ -121,8 +129,24 @@ public class pacman{
             puntos++;
         }else if(pacmanMapa[pacman[1]][pacman[0]] == 6){
             pacmanMapa[pacman[1]][pacman[0]] = 2;
+            System.out.println("Pacman esta mamadismo!");
             puntos = puntos + 5;
         }
+    }
+
+    private static void pacmanPoder(int[] pacman, int[][] pacmanMapa){
+        
+        if(pacmanMapa[pacman[1]][pacman[0]] == 6){
+            for(int i = 0; i <= poder; i-- ){
+                System.out.println("Pacman esta mamadismo!");
+                poder --;
+            }
+            System.out.println("Pacman ya perdio su poder");
+        }
+    }
+
+    private static void fruta(int[] pacman, int[][] pacmanMapa){
+        
     }
 
     private static void dibujaMundo(int[][] pacmanMapa, int[] pacman) {
@@ -163,6 +187,7 @@ public class pacman{
 
 		System.out.println("El personaje esta en X:[" + pacman[0] + "] Y:[" + pacman[1] + "]");
 		System.out.println("Tienes [ "+ puntos +" ] puntos");
+        
 
     }
 
