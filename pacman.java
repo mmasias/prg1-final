@@ -1,3 +1,4 @@
+
 import java.util.Scanner;
 import java.util.Random;
 
@@ -43,12 +44,19 @@ class pacman {
                 { 14, 13 },
                 { 16, 13 }
         };
+        int[] contarMovimientos = { 0 };
+        int[] puntos = { 0 };
         do {
-            imprimeMundo(elMapa, elPersonaje, NPCs);
-        } while (procesaMovimiento(elMapa, elPersonaje));
+            pasaElTiempo(contarMovimientos);
+            imprimeMundo(elMapa, elPersonaje, NPCs, contarMovimientos, puntos);
+        } while (procesaMovimiento(elMapa, elPersonaje, NPCs, puntos));
     };
 
-    private static boolean procesaMovimiento(int[][] elMapa, int[][] elPersonaje) {
+    private static void pasaElTiempo(int[] contarMovimientos) {
+        contarMovimientos[0]++;
+    }
+
+    private static boolean procesaMovimiento(int[][] elMapa, int[][] elPersonaje, int[][] NPCs, int[] puntos) {
 
         Scanner entrada = new Scanner(System.in);
         String inputUsuario;
@@ -68,12 +76,12 @@ class pacman {
             laDireccion = 'E';
         }
 
-        // mueveNPCs(elMapa, losNPCs);
-        mueve(elPersonaje[0], elMapa, laDireccion);
+        mueveNPCs(elMapa, NPCs, puntos);
+        mueve(elPersonaje[0], elMapa, laDireccion, false, puntos);
         return true;
     }
 
-    private static void mueve(int[] unPersonaje, int[][] unMapa, char unaDireccion) {
+    private static void mueve(int[] unPersonaje, int[][] unMapa, char unaDireccion, boolean isNPC, int[] puntos) {
 
         int elPersonajeX, elPersonajeY;
         elPersonajeX = unPersonaje[0];
@@ -105,11 +113,16 @@ class pacman {
             }
         }
 
+        if (unMapa[elPersonajeY][elPersonajeX] == 2 && isNPC == false) {
+            unMapa[elPersonajeY][elPersonajeX] = 0;
+            puntos[0]++;
+        }
+
         unPersonaje[0] = elPersonajeX;
         unPersonaje[1] = elPersonajeY;
     }
 
-    private static void mueveNPCs(int[][] elMapa, int[][] losNPCs) {
+    private static void mueveNPCs(int[][] elMapa, int[][] losNPCs, int[] puntos) {
 
         char[] laDireccion = { 'N', 'S', 'E', 'O' };
         char unaDireccion = ' ';
@@ -117,7 +130,7 @@ class pacman {
         for (int unNPC = 0; unNPC < losNPCs.length; unNPC++) {
             Random random = new Random();
             unaDireccion = laDireccion[random.nextInt(3)];
-            mueve(losNPCs[unNPC], elMapa, unaDireccion);
+            mueve(losNPCs[unNPC], elMapa, unaDireccion, true, puntos);
         }
     }
 
@@ -131,7 +144,8 @@ class pacman {
         return false;
     }
 
-    private static void imprimeMundo(int[][] elMapa, int[][] elPersonaje, int[][] losNPCs) {
+    private static void imprimeMundo(int[][] elMapa, int[][] elPersonaje, int[][] losNPCs, int[] contarMovimientos,
+            int[] puntos) {
 
         for (int i = 0; i < elMapa.length; i = i + 1) {
             for (int j = 0; j < elMapa[i].length; j = j + 1) {
@@ -147,13 +161,11 @@ class pacman {
             }
             System.out.println();
         }
+        imprimeStatus(elPersonaje, losNPCs, contarMovimientos, puntos);
     }
-    // imprimeStatus(elPersonaje, losNPCs, elReloj);
 
     private static void imprimeNPC() {
-
-        System.out.print(INICIO + BLACK + WHITE_BACKGROUND + "^V^" + RESET);
-
+        System.out.print(INICIO + BLACK + CYAN_BACKGROUND + "^V^" + RESET);
     }
 
     private static void imprimeElemento(int elementoDelMapa) {
@@ -172,6 +184,16 @@ class pacman {
 
     private static void imprimePersonaje() {
         System.out.print(" :v");
+    }
+
+    private static void imprimeStatus(int[][] elPersonaje, int[][] losNPCs, int[] contarMovimientos, int[] puntos) {
+        System.out.println("Llevas [" + contarMovimientos[0] + "] movimientos");
+        System.out.println("Tienes un puntjae de [" + puntos[0] + "]");
+        System.out.println("Son las [" + "]:[" + "] / El personaje está en X:[" + elPersonaje[0][0] + "] Y:["
+                + elPersonaje[0][1] + "]");
+        for (int unNPC = 0; unNPC < losNPCs.length; unNPC++) {
+            System.out.print("NPC[" + unNPC + "]=(" + losNPCs[unNPC][0] + "," + losNPCs[unNPC][1] + ") - ");
+        }
     }
 
     private static String INICIO = "\033[";
