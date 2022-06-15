@@ -21,7 +21,7 @@ public class Pacman{
             {1,1,1,1,1,1,0,1,2,1,1,1,1,2,2,1,1,1,1,2,1,0,1,1,1,1,1,1},
             {2,2,2,2,2,2,0,2,2,1,2,2,2,2,2,2,2,2,1,2,2,0,2,2,2,2,2,2},
             {1,1,1,1,1,1,0,1,2,1,1,1,1,1,1,1,1,1,1,2,1,0,1,1,1,1,1,1},
-            {1,1,1,1,1,1,0,1,2,2,2,2,2,6,6,2,2,2,2,2,1,0,1,1,1,1,1,1},
+            {1,1,1,1,1,1,0,1,2,2,2,2,2,2,6,2,2,2,2,2,1,0,1,1,1,1,1,1},
             {1,1,1,1,1,1,0,1,2,1,1,1,1,1,1,1,1,1,1,2,1,0,1,1,1,1,1,1},
             {1,1,1,1,1,1,0,1,2,1,1,1,1,1,1,1,1,1,1,2,1,0,1,1,1,1,1,1},
             {1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -46,25 +46,9 @@ public class Pacman{
         int[] turnosPastilla = {0};
 
         do{
-            horario(reloj);
             ImprimeMapa(unMapa,elPersonaje,losNPCs,reloj,turnosPastilla);
             monedasRestantes(unMapa);
         }while (seleccionarDireccion(unMapa,elPersonaje,losNPCs,turnosPastilla));
-    }
-    static void horario(int[]reloj){
-
-
-		reloj[1]=reloj[1]+10;
-
-		if (reloj[1]==60){
-			reloj[0]++;
-			reloj[1]=0;
-		}
-		if (reloj[0]==24){
-			reloj[0]=0;
-			reloj[1]=0;
-		}
-        rangoAntorcha = alcanceAntorcha(reloj);
     }
     
     static boolean seleccionarDireccion(int[][]elMapa,int[][]elPersonaje,int[][]losNPCs,int[]turnos){
@@ -172,6 +156,10 @@ public class Pacman{
 
         movimientosHechos = movimientosHechos + 1;
 
+        if(elMapa[posicionY][posicionX]==6){
+            puntos = puntos + 10;
+            elMapa[posicionY][posicionX]=2;
+        }
         elPersonaje[1] = posicionY;
         elPersonaje[0] = posicionX;
     } 
@@ -199,6 +187,7 @@ public class Pacman{
         if((personajeY==elNPC[0][1] && personajeX==elNPC[0][0]) && estaVulnerable==true){
             elNPC[0][1] = 13;
             elNPC[0][0] = 13;
+            puntos = puntos + 10;
             return true;
         }
         else if(personajeY==elNPC[0][1] && personajeX==elNPC[0][0]){
@@ -209,6 +198,8 @@ public class Pacman{
         if((personajeY==elNPC[1][1] && personajeX==elNPC[1][0]) && estaVulnerable==true){
             elNPC[1][1] = 13;
             elNPC[1][0] = 13;
+            puntos = puntos + 10;
+
             return true;
         }
         else if(personajeY==elNPC[1][1] && personajeX==elNPC[1][0]){
@@ -218,6 +209,8 @@ public class Pacman{
         if((personajeY==elNPC[2][1] && personajeX==elNPC[2][0]) && estaVulnerable==true){
             elNPC[2][1] = 13;
             elNPC[2][0] = 13;
+            puntos = puntos + 10;
+
             return true;
         }
         else if(personajeY==elNPC[2][1] && personajeX==elNPC[2][0]){
@@ -228,6 +221,7 @@ public class Pacman{
         if((personajeY==elNPC[3][1] && personajeX==elNPC[3][0]) && estaVulnerable==true){
             elNPC[3][1] = 13;
             elNPC[3][0] = 13;
+            puntos = puntos + 10;
             return true;
         }
         else if(personajeY==elNPC[3][1] && personajeX==elNPC[3][0]){
@@ -302,22 +296,8 @@ public class Pacman{
     }
 
     static boolean puedoVer(int i, int j, int[][] elPersonaje){
-        return Math.pow(elPersonaje[0][0]-j,2) + Math.pow(elPersonaje[0][1]-i,2)<=Math.pow(rangoAntorcha,2);
+        return true;
     }
-
-    static int alcanceAntorcha(int[]reloj){
-        
-        int hora, minuto;
-		double minutos;
-		hora = reloj[0];
-		minuto = reloj[1];
-		minutos = hora*60+minuto;
-
-		// if (hora<4||hora>=21){return 3;}
-		// if (hora>=4 && hora <8) {return ((int)(3.0+((32.0/240.0)*(minutos-240.0))));}
-		// if (hora>=17 && hora <21) {return ((int)(35.0+((-32.0/240.0)*(minutos-1030.0))));}
-		return 60;
-    } 
  
     static void ImprimePersonaje(){
         System.out.print(INICIO + WHITE_BOLD + BLACK_BACKGROUND + "\\0/" + RESET);
@@ -370,7 +350,6 @@ public class Pacman{
         }
     }
 
-    static int rangoAntorcha = 4;
     static boolean estaVulnerable=false;
     static boolean hayMonedas=true;
     static int puntos=0;
