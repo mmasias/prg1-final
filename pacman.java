@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.Random;
 
 class pacman {
     public static void main(String[] args) {
@@ -35,9 +36,15 @@ class pacman {
                 { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
         };
 
-        int[][] elPersonaje = { { 14, 23 } };
+        int[][] elPersonaje = { { 13, 21 } };
+        int[][] NPCs = {
+                { 11, 13 },
+                { 12, 13 },
+                { 14, 13 },
+                { 16, 13 }
+        };
         do {
-            imprimeMundo(elMapa, elPersonaje);
+            imprimeMundo(elMapa, elPersonaje, NPCs);
         } while (procesaMovimiento(elMapa, elPersonaje));
     };
 
@@ -102,41 +109,69 @@ class pacman {
         unPersonaje[1] = elPersonajeY;
     }
 
-    private static void imprimeMundo(int[][] elMapa, int[][] elPersonaje) {
+    private static void mueveNPCs(int[][] elMapa, int[][] losNPCs) {
+
+        char[] laDireccion = { 'N', 'S', 'E', 'O' };
+        char unaDireccion = ' ';
+
+        for (int unNPC = 0; unNPC < losNPCs.length; unNPC++) {
+            Random random = new Random();
+            unaDireccion = laDireccion[random.nextInt(3)];
+            mueve(losNPCs[unNPC], elMapa, unaDireccion);
+        }
+    }
+
+    private static boolean hayNPC(int[][] losNPCs, int i, int j) {
+
+        for (int unNPC = 0; unNPC < losNPCs.length; unNPC++) {
+            if (losNPCs[unNPC][0] == j && losNPCs[unNPC][1] == i) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static void imprimeMundo(int[][] elMapa, int[][] elPersonaje, int[][] losNPCs) {
 
         for (int i = 0; i < elMapa.length; i = i + 1) {
             for (int j = 0; j < elMapa[i].length; j = j + 1) {
                 if (i == elPersonaje[0][1] && j == elPersonaje[0][0]) {
                     imprimePersonaje();
                 } else {
-                    // if (hayNPC(losNPCs, i, j)) {
-                    // imprimeNPC();
-                    // } else {
-                    imprimeElemento(elMapa[i][j]);
-                    // }
+                    if (hayNPC(losNPCs, i, j)) {
+                        imprimeNPC();
+                    } else {
+                        imprimeElemento(elMapa[i][j]);
+                    }
                 }
             }
+            System.out.println();
         }
-        // imprimeBordeVertical(true);
     }
-    // imprimeBordeHorizontal(elMapa[0].length);
     // imprimeStatus(elPersonaje, losNPCs, elReloj);
+
+    private static void imprimeNPC() {
+
+        System.out.print(INICIO + BLACK + WHITE_BACKGROUND + "^V^" + RESET);
+
+    }
 
     private static void imprimeElemento(int elementoDelMapa) {
 
         String[] matrizDeElementos = {
-                INICIO + YELLOW + WHITE_BACKGROUND + " . " + RESET,
-                INICIO + WHITE + WHITE_BACKGROUND + "[#]" + RESET,
-                INICIO + RED + GREEN_BACKGROUND + "*" + RESET + INICIO + GREEN_BOLD + GREEN_BACKGROUND + "Y" + RESET
-                        + INICIO + RED + GREEN_BACKGROUND + "*" + RESET,
+                INICIO + WHITE + WHITE_BACKGROUND + " . " + RESET,
+                INICIO + BLACK + BLACK_BACKGROUND + "[#]" + RESET,
+                INICIO + YELLOW + YELLOW_BACKGROUND + " * " + RESET,
                 INICIO + BLUE_BOLD + BLUE_BACKGROUND + "~ ~" + RESET,
-                INICIO + YELLOW + GREEN_BACKGROUND + " : " + RESET
+                INICIO + RED + RED_BACKGROUND + " - " + RESET,
+                INICIO + BLACK + GREEN_BACKGROUND + " : " + RESET,
+                INICIO + GREEN + GREEN_BACKGROUND + " : " + RESET
         };
         System.out.print(matrizDeElementos[elementoDelMapa]);
     };
 
     private static void imprimePersonaje() {
-        System.out.print(":v");
+        System.out.print(" :v");
     }
 
     private static String INICIO = "\033[";
