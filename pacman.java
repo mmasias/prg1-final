@@ -34,6 +34,7 @@ class UnLaberinto {
             {1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1},
             {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
     };
+    int Turnos = 0;
     int[][] elPersonaje = { { 14, 21  } };
     int[] elReloj = {12,0};
     int[] TurnosConBaya = {0};
@@ -43,10 +44,11 @@ class UnLaberinto {
             { 15, 13 },
             { 17, 13 }
     };
-    int[] ContadorTiempo = {0};
+
     do {
         pasaElTiempo(elReloj);
-        imprimeMundo(unMapa, elPersonaje, losNPCs, elReloj, TurnosConBaya, ContadorTiempo);
+        imprimeMundo(unMapa, elPersonaje, losNPCs, elReloj, TurnosConBaya, Turnos);
+        Turnos = Turnos + 1;
     } while (procesaMovimiento(unMapa, elPersonaje, losNPCs) && Cancelar == 0);
 }
 
@@ -136,30 +138,29 @@ private static void limpiaPantalla() {
     System.out.flush();
 }
 
-private static void imprimeMundo(int[][] elMapa, int[][] elPersonaje, int[][] losNPCs, int[] elReloj, int[]TurnosConBaya, int[] ContadorTiempo) {
+private static void imprimeMundo(int[][] elMapa, int[][] elPersonaje, int[][] losNPCs, int[] elReloj, int[]TurnosConBaya, int Turnos) {
 
     limpiaPantalla();
     imprimeBordeHorizontal(elMapa[0].length);
-
+    
     int contadorPuntos = 0;
     int puntosPosibles = 0;
-    ContadorTiempo[0] = ContadorTiempo[0] + 1;
+    ContadorTiempo = ContadorTiempo + 1;
     
 
     for (int i = 0; i < elMapa.length; i = i + 1) {
         imprimeBordeVertical(false);
         for (int j = 0; j < elMapa[i].length; j = j + 1) {
-            if (ContadorTiempo[0] == 80){
-                elMapa[15][13] = 6;
-                elMapa[15][14] = 6;
-            } else if (((int)ContadorTiempo[0] <= 95 && (int)ContadorTiempo[0] >= 80) || (elPersonaje[i][j] == 6)){
-                if (elPersonaje[i][j]==6){
-                    contadorPuntos = contadorPuntos + 10;
-                }
+            if (ContadorTiempo == 80){
+               elMapa[15][13] = 6;
+               elMapa[15][14] = 6;
+            } else if ((ContadorTiempo <= 95 && ContadorTiempo >= 80)){
+               
                 elMapa[15][13] = 0;
-                elMapa[15][14] = 0;
-                ContadorTiempo[0] = 0;
-                
+               elMapa[15][14] = 0;
+                ContadorTiempo = 0;
+               } else if (elPersonaje[0][1]==6){
+                contadorPuntos = contadorPuntos + 10;
             }
             if (elMapa[i][j]== 0){
                 contadorPuntos = contadorPuntos + 1;
@@ -172,11 +173,14 @@ private static void imprimeMundo(int[][] elMapa, int[][] elPersonaje, int[][] lo
                 if (i == elPersonaje[0][1] && j == elPersonaje[0][0]) {
                 
                     if (i == elPersonaje[0][1] && j == elPersonaje[0][0] && elMapa[i][j] == 4){
-                        int Turnos = 20;
+                        int Tu = 20;
                         contadorPuntos = contadorPuntos - 1;
-                        TurnosConBaya[0] = Turnos;
+                        TurnosConBaya[0] = Tu;
+                        elMapa[i][j] = 0;
                     } 
-
+                    if (i == elPersonaje[0][1] && j == elPersonaje[0][0] && elMapa[i][j] == 2){
+                        elMapa[i][j] = 0;
+                    } 
                     imprimePersonaje();
                 } else {
                     if (hayNPC(losNPCs, i, j)) {
@@ -193,7 +197,7 @@ private static void imprimeMundo(int[][] elMapa, int[][] elPersonaje, int[][] lo
     }
     
     imprimeBordeHorizontal(elMapa[0].length);
-    imprimeStatus(elPersonaje, losNPCs, elReloj,contadorPuntos, puntosPosibles, TurnosConBaya);
+    imprimeStatus(elPersonaje, losNPCs, elReloj,contadorPuntos, puntosPosibles, TurnosConBaya, Turnos);
     
     if (puntosPosibles <= 0){
         Cancelar = 1;
@@ -201,7 +205,7 @@ private static void imprimeMundo(int[][] elMapa, int[][] elPersonaje, int[][] lo
     
 }
 
-private static void imprimeStatus(int[][] elPersonaje, int[][] losNPCs, int[] elReloj, int contadorPuntos, int puntosPosibles, int[] TurnosConBaya) {
+private static void imprimeStatus(int[][] elPersonaje, int[][] losNPCs, int[] elReloj, int contadorPuntos, int puntosPosibles, int[] TurnosConBaya, int Turnos) {
 
     System.out.println("Son las ["+elReloj[0]+"]:["+elReloj[1]+"] / El personaje está en X:[" + elPersonaje[0][0] + "] Y:[" + elPersonaje[0][1] + "]");
     for (int unNPC = 0; unNPC < losNPCs.length; unNPC++) {
@@ -212,7 +216,7 @@ private static void imprimeStatus(int[][] elPersonaje, int[][] losNPCs, int[] el
     if (TurnosConBaya[0] >= 0){
         System.out.println("Turnos con Poder: [" + TurnosConBaya[0] + "]");
     }
-
+    System.out.println("Turnos ocupados: [" + Turnos + "]");
 }
 
 private static void imprimeElemento(int elementoDelMapa) {
@@ -262,6 +266,7 @@ private static void imprimeBordeVertical(boolean esBordeDerecho) {
 }
 
 static int Cancelar = 0;
+static int ContadorTiempo = 0;
 private static String INICIO = "\033[";
 private static String RESET = "\033[0m";
 
