@@ -123,7 +123,7 @@ public class Pacman{
         int posicionY = elPersonaje[1];
         int posicionX = elPersonaje[0];
         int turnosRestantes = turnos[0];
-        int tiempoDeFruta=0;
+        int verFruta=0;
 
         if(direccion == 'N' && (elMapa[posicionY-1][posicionX]%2==0)){posicionY = posicionY - 1;}else
         if(direccion == 'S' && (elMapa[posicionY+1][posicionX]%2==0)){posicionY = posicionY + 1;}else
@@ -160,9 +160,7 @@ public class Pacman{
 //-----------------Fruta-------------------------
         if(movimientosHechos == 80){
             elMapa[15][14]=6;
-            tiempoDeFruta = 15;
         }
-        RestarTiempoFruta(tiempoDeFruta);
 
         if(elMapa[posicionY][posicionX]==6){
             puntos = puntos + 10;
@@ -179,13 +177,7 @@ public class Pacman{
             NPCvulnerable(turnosRestantes);
         }
     }    
-    
-    static void RestarTiempoFruta(int tiempoFruta){
-        if(tiempoFruta>0){
-            tiempoFruta = tiempoFruta - 1;
-        }
-    }
-    
+
     static boolean NPCvulnerable(int[]turnosRestantes){
         if(turnosRestantes[0]>0){
             estaVulnerable = true;
