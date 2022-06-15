@@ -39,6 +39,7 @@ class elPacman{
         };
 
         int[][] pacmanPosicion = {{13, 21}};
+		int[] contadorTurnos = {1};
 		int[][] losFantasmas = {
 			{10, 13},
 			{12, 13},
@@ -51,13 +52,18 @@ class elPacman{
 
 		//if (puntosObtenidos[0] < 244){
 			do {
-				imprimirElMundo(matrizDelMapa, pacmanPosicion, losFantasmas, puntosObtenidos, modoInvincibilidad, contadorInvincibilidad);
+				pasoDelTiempo(contadorTurnos);
+				imprimirElMundo(matrizDelMapa, pacmanPosicion, losFantasmas, puntosObtenidos, modoInvincibilidad, contadorInvincibilidad, contadorTurnos);
 			} while (puntosObtenidos[0] < 380 && (procesaMovimiento(matrizDelMapa, pacmanPosicion, losFantasmas)));
 		//} else {
 		//	imprimirElMundo(matrizDelMapa, pacmanPosicion, losFantasmas, puntosObtenidos);
 		//	System.out.println("Has obtenido todas las monedas, y ganado el juego!");
 		//}
     }
+
+	private static void pasoDelTiempo(int[] contadorTurnos) {
+		contadorTurnos[0] = contadorTurnos[0] + 1;
+	}
 
 	private static boolean procesaMovimiento(int[][] elMapa, int[][] pacmanPosicion, int[][] losFantasmas) {
 
@@ -133,7 +139,7 @@ class elPacman{
 		System.out.flush();
 	}
 
-    private static void imprimirElMundo(int[][] elMapa, int[][] pacmanPosicion, int[][] losFantasmas, int[] puntosObtenidos, boolean[] modoInvincibilidad, int[] contadorInvincibilidad) {
+    private static void imprimirElMundo(int[][] elMapa, int[][] pacmanPosicion, int[][] losFantasmas, int[] puntosObtenidos, boolean[] modoInvincibilidad, int[] contadorInvincibilidad, int[] contadorTurnos) {
 
 		limpiaPantalla();
 
@@ -157,7 +163,7 @@ class elPacman{
 						imprimePersonaje();
 					} else {
 						if (hayFantasma(losFantasmas, i, j)) {
-							imprimeFantasma();
+							imprimeFantasma(modoInvincibilidad);
 						} else {
 							imprimeElemento(elMapa[i][j]);
 						}
@@ -165,12 +171,13 @@ class elPacman{
 			}
             System.out.println();
 		}		
-        imprimeStatus(pacmanPosicion, losFantasmas, puntosObtenidos);
+        imprimeStatus(pacmanPosicion, losFantasmas, puntosObtenidos, contadorTurnos);
 	}
 
-    private static void imprimeStatus(int[][] pacmanPosicion, int[][] losFantasmas, int[] puntosObtenidos) {
+    private static void imprimeStatus(int[][] pacmanPosicion, int[][] losFantasmas, int[] puntosObtenidos, int[] contadorTurnos) {
 
-		System.out.println("Puntos: " + puntosObtenidos[0]);
+		System.out.println("Movimiento numero: [" + contadorTurnos[0] +"]");
+		System.out.println("Puntos: [" + puntosObtenidos[0] + "]");
 		System.out.println("\nPacman posicion = (" + pacmanPosicion[0][0] + ", " + pacmanPosicion[0][1] + ")");
 		for (int unFantasma = 0; unFantasma < losFantasmas.length; unFantasma = unFantasma + 1) {
 			System.out.println("Fantasma [#" + unFantasma + "] = (" + losFantasmas[unFantasma][0] + ", " + losFantasmas[unFantasma][1] + ")");
@@ -197,8 +204,12 @@ class elPacman{
 		System.out.print(INICIO + BLACK + YELLOW_BACKGROUND + "°< " + RESET);
 	}
 
-	private static void imprimeFantasma() {
-		System.out.print(INICIO + YELLOW_BOLD + RED_BACKGROUND + "°w°" + RESET);
+	private static void imprimeFantasma(boolean[] modoInvincibilidad) {
+		if (modoInvincibilidad[0] == true){
+			System.out.print(INICIO + YELLOW_BOLD + BLUE_BACKGROUND + "°#°" + RESET);
+		} else {
+			System.out.print(INICIO + YELLOW_BOLD + RED_BACKGROUND + "°w°" + RESET);
+		}
 	}
 
     private static void imprimirVacio() {
