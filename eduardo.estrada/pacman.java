@@ -1,3 +1,4 @@
+import java.util.Random;
 import java.util.Scanner;
 
 public class pacman {
@@ -6,6 +7,12 @@ public class pacman {
     private static int movimientos = 0;
     private static int duracionFruta = 0;
     private static int movimientosRestantesParaFruta = 80;
+    private static int[][] NPCs = {
+        { 10, 13 },
+        { 13, 13 },
+        { 14, 13 },
+        { 17, 13 }
+    };
 
     public static void main(String[] args) {
         int[][] elMapa = {
@@ -41,8 +48,8 @@ public class pacman {
         };
         int[] personaje = {22,13};
 		do {
-			imprimeMundo(elMapa, personaje);
-		} while (procesaMovimiento(elMapa, personaje));
+			imprimeMundo(elMapa, personaje, NPCs);
+		} while (procesaMovimiento(elMapa, personaje, NPCs));
     }
 
     private static void limpiaPantalla() {
@@ -50,7 +57,17 @@ public class pacman {
         System.out.flush();
 	}
 
-    private static void imprimeMundo(int[][] elMapa, int[] elPersonaje) {
+    private static boolean hayNPC(int[][] losNPCs, int x, int y) {
+
+		for (int unNPC = 0; unNPC < losNPCs.length; unNPC++) {
+			if (losNPCs[unNPC][0] == x && losNPCs[unNPC][1] == y) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+    private static void imprimeMundo(int[][] elMapa, int[] elPersonaje, int[][] losNPCs) {
 
 		limpiaPantalla();
 
@@ -58,7 +75,11 @@ public class pacman {
 			for (int x = 0; x < elMapa[y].length; x++) {
                 if (x == elPersonaje[0] && y == elPersonaje[1]) {
                     imprimePersonaje();
-                } else {
+                }
+                else if (hayNPC(losNPCs, x, y)) {
+                    imprimeNPC();
+                }
+                else {
                     imprimeElemento(elMapa[y][x]);
                 }
 			}
@@ -70,6 +91,12 @@ public class pacman {
     private static void imprimePersonaje() {
 
 		System.out.print(INICIO + BLACK + WHITE_BACKGROUND + " :v" + RESET);
+
+	}
+
+    private static void imprimeNPC() {
+
+		System.out.print(INICIO + BLUE_BOLD + WHITE_BACKGROUND + "^V^" + RESET);
 
 	}
 
@@ -100,7 +127,7 @@ public class pacman {
     }
 
 
-    private static boolean procesaMovimiento(int[][] elMapa, int[] elPersonaje) {
+    private static boolean procesaMovimiento(int[][] elMapa, int[] elPersonaje, int[][] losNPCs) {
 
 		Scanner entrada = new Scanner(System.in);
 		String inputUsuario;
@@ -114,7 +141,8 @@ public class pacman {
 		if (inputUsuario.equals("s")) {laDireccion='S';} else
 		if (inputUsuario.equals("d")) {laDireccion='E';} 
 
-		boolean continuar = mueve(elPersonaje, elMapa, laDireccion);
+		boolean continuar = mueve(elPersonaje, elMapa, laDireccion, false);
+        mueveNPCs(elMapa, losNPCs);
         
         if(duracionFruta>0){
             elMapa[15][13] = 6;
@@ -125,7 +153,7 @@ public class pacman {
 		return continuar;
 	}
 
-	private static boolean mueve(int[] unPersonaje, int[][] unMapa, char unaDireccion ){
+	private static boolean mueve(int[] unPersonaje, int[][] unMapa, char unaDireccion, boolean esNPC){
 		int elPersonajeX, elPersonajeY;
 		elPersonajeX = unPersonaje[0];
 		elPersonajeY = unPersonaje[1];
@@ -173,8 +201,25 @@ public class pacman {
 		unPersonaje[0] = elPersonajeX;
 		unPersonaje[1] = elPersonajeY;
 
-        registraMovimiento(seMueve);
-        return registraPuntos(unPersonaje, unMapa);
+        if(!esNPC){
+            registraMovimiento(seMueve);
+            return registraPuntos(unPersonaje, unMapa);
+        }
+        else{
+            return true;
+        }
+	}
+    
+    private static void mueveNPCs(int[][] elMapa, int[][] losNPCs) {
+
+		char[] laDireccion = {'N','S','E','O'};
+		char unaDireccion = ' ';
+
+		for (int unNPC = 0; unNPC < losNPCs.length; unNPC++) {
+			Random random = new Random();
+			unaDireccion = laDireccion[random.nextInt(3)];
+			mueve(losNPCs[unNPC], elMapa, unaDireccion, true);
+		}
 	}
 
     private static boolean registraPuntos(int[] personaje, int[][] unMapa){
@@ -202,7 +247,7 @@ public class pacman {
 			}
 		}
         if(!hayPastillas){
-            imprimeMundo(unMapa, personaje); // Imprimir el mundo por ultima vez
+            imprimeMundo(unMapa, personaje, NPCs); // Imprimir el mundo por ultima vez
             System.out.println(" Haz ganado el juego con [ "+ puntos +" ] puntos | Haciendo [ "+ movimientos +" ] movimientos");
         }
         return hayPastillas; //Si no hay mas pastillas el juego se termina
