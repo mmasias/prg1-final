@@ -163,12 +163,14 @@ public class Pacman{
         
 //--------------Turnos de pastilla-----------
         if(elMapa[posicionY][posicionX]==4){
-            puntos = puntos + 4;
+            puntos = puntos + 5;
             turnosRestantes = 21;
             elMapa[posicionY][posicionX]=2;
         }
         turnos[0] = turnosRestantes;
         restarTurnos(turnos);
+
+        movimientosHechos = movimientosHechos + 1;
 
         elPersonaje[1] = posicionY;
         elPersonaje[0] = posicionX;
@@ -283,6 +285,7 @@ public class Pacman{
         System.out.println("El personaje esta en: " + "X: " + "["+elPersonaje[0][0]+"]" + " Y: " + "["+elPersonaje[0][1]+"]");
         System.out.println("Son las ["+reloj[0]+"]:["+reloj[1]+"]" + " horas");
         System.out.println("Turnos restantes: ["+turnos[0]+"]");
+        System.out.println("Movimientos hechos: " + "[" + movimientosHechos + "]");
     }
 
     static void limpiaPantalla() {
@@ -371,6 +374,7 @@ public class Pacman{
     static boolean estaVulnerable=false;
     static boolean hayMonedas=true;
     static int puntos=0;
+    static int movimientosHechos=0;
 
     private static String INICIO = "\033[";
 	private static String RESET = "\033[0m";
