@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class pacman{
 
-    private static int puntos = 0, poder = 10;
+    private static int puntos = 0, poder = 10, contador = 0;
     public static void main(String[] args){
         int[][] pacmanMapa ={
             {1,0,1,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,1,0,1},				
@@ -79,6 +79,12 @@ public class pacman{
 
 	}
 
+    private static void dibujaFruta() {
+
+		System.out.print(INICIO + PURPLE + PURPLE_BACKGROUND + "!T!" + RESET);
+
+	}
+
     private static boolean movimientoPacman(int[][] pacmanMapa, int[] pacman) {
 
 		Scanner entrada = new Scanner(System.in);
@@ -121,6 +127,7 @@ public class pacman{
         
         registraPuntos(pacman, pacmanMapa);
         pacmanPoder(pacman, pacmanMapa);
+        fruta(pacman, pacmanMapa);
 	}
 
     private static void registraPuntos(int[] pacman, int[][] pacmanMapa){
@@ -146,7 +153,11 @@ public class pacman{
     }
 
     private static void fruta(int[] pacman, int[][] pacmanMapa){
-        
+        do{
+            contador ++;
+        }while(contador == 80);{
+            dibujaFruta();
+        }
     }
 
     private static void dibujaMundo(int[][] pacmanMapa, int[] pacman) {
