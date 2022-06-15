@@ -21,7 +21,7 @@ public class Pacman{
             {1,1,1,1,1,1,0,1,2,1,1,1,1,2,2,1,1,1,1,2,1,0,1,1,1,1,1,1},
             {2,2,2,2,2,2,0,2,2,1,2,2,2,2,2,2,2,2,1,2,2,0,2,2,2,2,2,2},
             {1,1,1,1,1,1,0,1,2,1,1,1,1,1,1,1,1,1,1,2,1,0,1,1,1,1,1,1},
-            {1,1,1,1,1,1,0,1,2,2,2,2,2,2,6,2,2,2,2,2,1,0,1,1,1,1,1,1},
+            {1,1,1,1,1,1,0,1,2,2,2,2,2,2,2,2,2,2,2,2,1,0,1,1,1,1,1,1},
             {1,1,1,1,1,1,0,1,2,1,1,1,1,1,1,1,1,1,1,2,1,0,1,1,1,1,1,1},
             {1,1,1,1,1,1,0,1,2,1,1,1,1,1,1,1,1,1,1,2,1,0,1,1,1,1,1,1},
             {1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -123,6 +123,7 @@ public class Pacman{
         int posicionY = elPersonaje[1];
         int posicionX = elPersonaje[0];
         int turnosRestantes = turnos[0];
+        int tiempoDeFruta=0;
 
         if(direccion == 'N' && (elMapa[posicionY-1][posicionX]%2==0)){posicionY = posicionY - 1;}else
         if(direccion == 'S' && (elMapa[posicionY+1][posicionX]%2==0)){posicionY = posicionY + 1;}else
@@ -156,10 +157,18 @@ public class Pacman{
 
         movimientosHechos = movimientosHechos + 1;
 
+//-----------------Fruta-------------------------
+        if(movimientosHechos == 80){
+            elMapa[15][14]=6;
+            tiempoDeFruta = 15;
+        }
+        RestarTiempoFruta(tiempoDeFruta);
+
         if(elMapa[posicionY][posicionX]==6){
             puntos = puntos + 10;
             elMapa[posicionY][posicionX]=2;
         }
+
         elPersonaje[1] = posicionY;
         elPersonaje[0] = posicionX;
     } 
@@ -170,6 +179,12 @@ public class Pacman{
             NPCvulnerable(turnosRestantes);
         }
     }    
+    
+    static void RestarTiempoFruta(int tiempoFruta){
+        if(tiempoFruta>0){
+            tiempoFruta = tiempoFruta - 1;
+        }
+    }
     
     static boolean NPCvulnerable(int[]turnosRestantes){
         if(turnosRestantes[0]>0){
@@ -277,7 +292,6 @@ public class Pacman{
         }
         ImprimeBorde(MapaPorImprimir[0].length);
         System.out.println("El personaje esta en: " + "X: " + "["+elPersonaje[0][0]+"]" + " Y: " + "["+elPersonaje[0][1]+"]");
-        System.out.println("Son las ["+reloj[0]+"]:["+reloj[1]+"]" + " horas");
         System.out.println("Turnos restantes: ["+turnos[0]+"]");
         System.out.println("Movimientos hechos: " + "[" + movimientosHechos + "]");
     }
