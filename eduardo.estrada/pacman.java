@@ -4,6 +4,8 @@ public class pacman {
 
     private static int puntos = 0;
     private static int movimientos = 0;
+    private static int duracionFruta = 0;
+    private static int movimientosRestantesParaFruta = 80;
 
     public static void main(String[] args) {
         int[][] elMapa = {
@@ -22,7 +24,7 @@ public class pacman {
             {1,1,1,1,1,1,2,1,0,1,1,1,1,0,0,1,1,1,1,0,1,2,1,1,1,1,1,1},				
             {0,0,0,0,0,0,2,0,0,1,0,0,0,0,0,0,0,0,1,0,1,2,0,0,0,0,0,0},				
             {1,1,1,1,1,1,2,1,0,1,1,1,1,1,1,1,1,1,1,0,1,2,1,1,1,1,1,1},				
-            {1,1,1,1,1,1,2,1,0,0,0,0,0,6,6,0,0,0,0,0,1,2,1,1,1,1,1,1},				
+            {1,1,1,1,1,1,2,1,0,0,0,0,0, 0 ,0,0,0,0,0,0,1,2,1,1,1,1,1,1},				
             {1,1,1,1,1,1,2,1,0,1,1,1,1,1,1,1,1,1,1,0,1,2,1,1,1,1,1,1},				
             {1,1,1,1,1,1,2,1,0,1,1,1,1,1,1,1,1,1,1,0,1,2,1,1,1,1,1,1},				
             {1,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,1},				
@@ -88,6 +90,12 @@ public class pacman {
     private static void imprimeStatus(int[] elPersonaje) {
 
 		System.out.println("El personaje está en X:[" + elPersonaje[0] + "] Y:[" + elPersonaje[1] + "] | Tienes [ "+ puntos +" ] puntos | Haz hecho [ "+ movimientos +" ] movimientos");
+        if(duracionFruta>0){
+            System.out.println("Te quedan [ "+ duracionFruta + " ] para que desaparezca la fruta");
+        }
+        else{
+            System.out.println("Te faltan [ "+ movimientosRestantesParaFruta + " ] para que aparezca la fruta");
+        }
 
     }
 
@@ -106,11 +114,18 @@ public class pacman {
 		if (inputUsuario.equals("s")) {laDireccion='S';} else
 		if (inputUsuario.equals("d")) {laDireccion='E';} 
 
-		mueve(elPersonaje, elMapa, laDireccion);
-		return true;
+		boolean continuar = mueve(elPersonaje, elMapa, laDireccion);
+        
+        if(duracionFruta>0){
+            elMapa[15][13] = 6;
+        }
+        else{
+            elMapa[15][13] = 0;
+        }
+		return continuar;
 	}
 
-	private static void mueve(int[] unPersonaje, int[][] unMapa, char unaDireccion ){
+	private static boolean mueve(int[] unPersonaje, int[][] unMapa, char unaDireccion ){
 		int elPersonajeX, elPersonajeY;
 		elPersonajeX = unPersonaje[0];
 		elPersonajeY = unPersonaje[1];
@@ -157,12 +172,12 @@ public class pacman {
 
 		unPersonaje[0] = elPersonajeX;
 		unPersonaje[1] = elPersonajeY;
-        
-        registraPuntos(unPersonaje, unMapa);
+
         registraMovimiento(seMueve);
+        return registraPuntos(unPersonaje, unMapa);
 	}
 
-    private static void registraPuntos(int[] personaje, int[][] unMapa){
+    private static boolean registraPuntos(int[] personaje, int[][] unMapa){
         if(unMapa[personaje[1]][personaje[0]] == 2){
             unMapa[personaje[1]][personaje[0]] = 0;
             puntos++;
@@ -171,11 +186,46 @@ public class pacman {
             unMapa[personaje[1]][personaje[0]] = 0 ;
             puntos+=5;
         }
+        else if(unMapa[personaje[1]][personaje[0]] == 6){
+            unMapa[personaje[1]][personaje[0]] = 0 ;
+            duracionFruta = 0;
+            movimientosRestantesParaFruta = 80;
+            puntos+=10;
+        }
+
+        boolean hayPastillas = false;
+        for (int y = 0; y < unMapa.length; y++) {
+			for (int x = 0; x < unMapa[y].length; x++) {
+                if(unMapa[y][x] == 2 || unMapa[y][x] == 4){
+                    hayPastillas = true;
+                }
+			}
+		}
+        if(!hayPastillas){
+            imprimeMundo(unMapa, personaje); // Imprimir el mundo por ultima vez
+            System.out.println(" Haz ganado el juego con [ "+ puntos +" ] puntos | Haciendo [ "+ movimientos +" ] movimientos");
+        }
+        return hayPastillas; //Si no hay mas pastillas el juego se termina
     }
 
     private static void registraMovimiento(boolean seMueve){
         if(seMueve){
             movimientos++;
+            checkFruta();
+        }
+    }
+    private static void checkFruta(){
+        if(duracionFruta> 0) {
+            duracionFruta --;
+            if(duracionFruta == 0){
+                movimientosRestantesParaFruta = 80;
+            }
+        }
+        else{
+            movimientosRestantesParaFruta--;
+            if(movimientosRestantesParaFruta < 1){
+                duracionFruta = 15;
+            }
         }
     }
 
