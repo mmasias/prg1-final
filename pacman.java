@@ -43,16 +43,27 @@ class pacman {
                 { 13, 12 },
                 { 13, 12 }
         };
-        int[] contarMovimientos = { 0 };
+        int[] contarMovimientos = { -1 };
         int[] puntos = { 0 };
         do {
             pasaElTiempo(contarMovimientos);
+            fruta(contarMovimientos, elMapa, elPersonaje[0], puntos);
             imprimeMundo(elMapa, elPersonaje, NPCs, contarMovimientos, puntos);
         } while (procesaMovimiento(elMapa, elPersonaje, NPCs, puntos));
     };
 
-    private static void pastillaFuerza(int[] contarMovimientos) {
-
+    private static void fruta(int[] contarMovimientos, int[][] unMapa, int[] unPersonaje, int[] puntos) {
+        int elPersonajeX, elPersonajeY;
+        elPersonajeX = unPersonaje[0];
+        elPersonajeY = unPersonaje[1];
+        for (int tiempoFruta = 0; tiempoFruta > contarMovimientos[0]; tiempoFruta++) {
+            if (tiempoFruta > 80) {
+                unMapa[elPersonajeY][elPersonajeX] = 0;
+                puntos[0] = puntos[0] + 10;
+            } else {
+                unMapa[elPersonajeY][elPersonajeX] = 6;
+            }
+        }
     }
 
     private static void pasaElTiempo(int[] contarMovimientos) {
@@ -123,6 +134,10 @@ class pacman {
         if (unMapa[elPersonajeY][elPersonajeX] == 4 && isNPC == false) {
             unMapa[elPersonajeY][elPersonajeX] = 0;
             puntos[0] = puntos[0] + 5;
+        }
+        if (unMapa[elPersonajeY][elPersonajeX] == 6 && isNPC == false) {
+            unMapa[elPersonajeY][elPersonajeX] = 0;
+            puntos[0] = puntos[0] + 10;
         }
 
         unPersonaje[0] = elPersonajeX;
@@ -202,11 +217,6 @@ class pacman {
     private static void imprimeStatus(int[][] elPersonaje, int[][] losNPCs, int[] contarMovimientos, int[] puntos) {
         System.out.println("Llevas [" + contarMovimientos[0] + "] movimientos");
         System.out.println("Tienes un puntjae de [" + puntos[0] + "]");
-        System.out.println("Son las [" + "]:[" + "] / El personaje está en X:[" + elPersonaje[0][0] + "] Y:["
-                + elPersonaje[0][1] + "]");
-        for (int unNPC = 0; unNPC < losNPCs.length; unNPC++) {
-            System.out.print("NPC[" + unNPC + "]=(" + losNPCs[unNPC][0] + "," + losNPCs[unNPC][1] + ") - ");
-        }
     }
 
     private static String INICIO = "\033[";
