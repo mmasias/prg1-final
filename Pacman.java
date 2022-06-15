@@ -123,7 +123,6 @@ public class Pacman{
         int posicionY = elPersonaje[1];
         int posicionX = elPersonaje[0];
         int turnosRestantes = turnos[0];
-        int verFruta=0;
 
         if(direccion == 'N' && (elMapa[posicionY-1][posicionX]%2==0)){posicionY = posicionY - 1;}else
         if(direccion == 'S' && (elMapa[posicionY+1][posicionX]%2==0)){posicionY = posicionY + 1;}else
