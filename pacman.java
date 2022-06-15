@@ -19,27 +19,34 @@ class UnLaberinto {
             {1, 1, 1, 1, 1, 1, 2, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 2, 1, 1, 1, 1, 1, 1},
             {0, 0, 0, 0, 0, 0, 2, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 2, 0, 0, 0, 0, 0, 0},
             {1, 1, 1, 1, 1, 1, 2, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 2, 1, 1, 1, 1, 1, 1},
-            {1, 1, 1, 1, 1, 1, 2, 1, 0, 0, 0, 0, 0, 6, 6, 0, 0, 0, 0, 0, 1, 2, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 1, 1, 1, 1, 1, 1},
             {1, 1, 1, 1, 1, 1, 2, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 2, 1, 1, 1, 1, 1, 1},
             {1, 1, 1, 1, 1, 1, 2, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 2, 1, 1, 1, 1, 1, 1},
             {1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1},
             {1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1},
             {1, 2, 1, 1, 1, 1, 2, 2, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 2, 2, 2, 1, 1, 1, 1, 2, 1},
             {1, 4, 2, 2, 1, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 1, 2, 2, 4, 1},
-            {1, 1, 1, 2, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 2, 1, 1, 1}
+            {1, 1, 1, 2, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 2, 1, 1, 1},
+            {1, 1, 1, 2, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 2, 1, 1, 1},
+            {1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1},
+            {1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1},
+            {1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1},
+            {1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
     };
-    int[][] elPersonaje = { { 14, 23  } };
-    int[] elReloj = {16,0};
+    int[][] elPersonaje = { { 14, 21  } };
+    int[] elReloj = {12,0};
     int[] TurnosConBaya = {0};
     int[][] losNPCs = {
-            { 14, 11 },
-            { 14, 13 },
-            { 14, 16 },
-            { 14, 18 }
+            { 10, 13 },
+            { 12, 13 },
+            { 15, 13 },
+            { 17, 13 }
     };
+    int[] ContadorTiempo = {0};
     do {
         pasaElTiempo(elReloj);
-        imprimeMundo(unMapa, elPersonaje, losNPCs, elReloj, TurnosConBaya);
+        imprimeMundo(unMapa, elPersonaje, losNPCs, elReloj, TurnosConBaya, ContadorTiempo);
     } while (procesaMovimiento(unMapa, elPersonaje, losNPCs) && Cancelar == 0);
 }
 
@@ -54,23 +61,9 @@ private static void pasaElTiempo(int[] elReloj) {
         elReloj[0]=0;
         elReloj[1]=0;
     }
-
-    ALCANCE_ANTORCHA = alcanceAntorcha(elReloj);
 }
 
-private static int alcanceAntorcha(int[] elReloj) {
-    
-    int hora, minuto;
-    double minutos;
-    hora = elReloj[0];
-    minuto = elReloj[1];
-    minutos = hora*60+minuto;
 
-    if (hora<4||hora>=21){return 3;}
-    if (hora>=4 && hora <8) {return ((int)(3.0+((32.0/240.0)*(minutos-240.0))));}
-    if (hora>=17 && hora <21) {return ((int)(35.0+((-32.0/240.0)*(minutos-1030.0))));}
-    return 35;
-}
 
 private static boolean procesaMovimiento(int[][] elMapa, int[][] elPersonaje, int[][] losNPCs) {
 
@@ -143,30 +136,39 @@ private static void limpiaPantalla() {
     System.out.flush();
 }
 
-private static void imprimeMundo(int[][] elMapa, int[][] elPersonaje, int[][] losNPCs, int[] elReloj, int[]TurnosConBaya) {
+private static void imprimeMundo(int[][] elMapa, int[][] elPersonaje, int[][] losNPCs, int[] elReloj, int[]TurnosConBaya, int[] ContadorTiempo) {
 
     limpiaPantalla();
     imprimeBordeHorizontal(elMapa[0].length);
 
     int contadorPuntos = 0;
     int puntosPosibles = 0;
-    int unaVez = 0;
-    
+    ContadorTiempo[0] = ContadorTiempo[0] + 1;
     
 
     for (int i = 0; i < elMapa.length; i = i + 1) {
         imprimeBordeVertical(false);
         for (int j = 0; j < elMapa[i].length; j = j + 1) {
-
+            if (ContadorTiempo[0] == 80){
+                elMapa[15][13] = 6;
+                elMapa[15][14] = 6;
+            } else if (((int)ContadorTiempo[0] <= 95 && (int)ContadorTiempo[0] >= 80) || (elPersonaje[i][j] == 6)){
+                if (elPersonaje[i][j]==6){
+                    contadorPuntos = contadorPuntos + 10;
+                }
+                elMapa[15][13] = 0;
+                elMapa[15][14] = 0;
+                ContadorTiempo[0] = 0;
+                
+            }
             if (elMapa[i][j]== 0){
                 contadorPuntos = contadorPuntos + 1;
             }
 
-            if (elMapa[i][j]==0 || elMapa[i][j]== 2){
+            if (elMapa[i][j]== 2){
                 puntosPosibles = puntosPosibles + 1; 
             }
 
-            if (puedoVer(i, j, elPersonaje)){
                 if (i == elPersonaje[0][1] && j == elPersonaje[0][0]) {
                 
                     if (i == elPersonaje[0][1] && j == elPersonaje[0][0] && elMapa[i][j] == 4){
@@ -183,13 +185,9 @@ private static void imprimeMundo(int[][] elMapa, int[][] elPersonaje, int[][] lo
                         imprimeElemento(elMapa[i][j]);
                     }
                 }
-            } else {
-                imprimeVacio();
             }
-        }
         imprimeBordeVertical(true);
     }
-    unaVez = 0;
     if(TurnosConBaya[0] > 0){
         TurnosConBaya[0] = TurnosConBaya[0] - 1;
     }
@@ -209,7 +207,7 @@ private static void imprimeStatus(int[][] elPersonaje, int[][] losNPCs, int[] el
     for (int unNPC = 0; unNPC < losNPCs.length; unNPC++) {
         System.out.print("NPC[" + unNPC + "]=(" + losNPCs[unNPC][0] + "," + losNPCs[unNPC][1] + ") - ");
     }
-    System.out.println("\n" + "Alcance de la antorcha: " + ALCANCE_ANTORCHA);
+
     System.out.println("Puntos obtenidos: [" + contadorPuntos + "] Puntos faltantes: [" + puntosPosibles + "]");
     if (TurnosConBaya[0] >= 0){
         System.out.println("Turnos con Poder: [" + TurnosConBaya[0] + "]");
@@ -232,21 +230,9 @@ private static void imprimeElemento(int elementoDelMapa) {
     System.out.print(matrizDeElementos[elementoDelMapa]);
 }
 
-private static void imprimeVacio() {
-
-    System.out.print(INICIO + BLACK + BLACK_BACKGROUND + "   " + RESET);
-
-}
-
-private static boolean puedoVer(int i, int j, int[][] elPersonaje) {
-
-    return Math.pow(elPersonaje[0][0]-j,2)+Math.pow(elPersonaje[0][1]-i,2)<=Math.pow(ALCANCE_ANTORCHA,2);
-
-}
-
 private static void imprimePersonaje() {
 
-    System.out.print(INICIO + BLACK_BOLD + GREEN_BACKGROUND + "\\O/" + RESET);
+    System.out.print(INICIO + BLACK_BOLD + CYAN_BACKGROUND + "\\O/" + RESET);
 
 }
 
@@ -275,7 +261,6 @@ private static void imprimeBordeVertical(boolean esBordeDerecho) {
 
 }
 
-private static int ALCANCE_ANTORCHA = 3;
 static int Cancelar = 0;
 private static String INICIO = "\033[";
 private static String RESET = "\033[0m";
